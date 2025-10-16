@@ -20,8 +20,8 @@ class LocalClient(LLMClientABC):
                       "role": "user",
                       "content": [
                           {
-                              "type": "image",
-                              "image": input,
+                              "type": "video",
+                              "video": input,
                           },
                           {"type": "text", "text": prompt if prompt else self.prompt},
                       ],
