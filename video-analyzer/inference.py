@@ -18,8 +18,13 @@ def main():
     args = parser.parse_args()
 
     client = choose_client(args.client)
-    output = client.invoke(args.video, args.prompt, args.video_type)
+    prompt = args.prompt if args.prompt else "Describe the details"
+    output = client.invoke(args.video, prompt, args.video_type)
     print(output)
 
 if __name__ == "__main__":
     main()
+
+
+# Dummy Image Sample Url
+# https://yavuzceliker.github.io/sample-images/image-1021.jpg
