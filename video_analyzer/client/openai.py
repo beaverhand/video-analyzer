@@ -29,7 +29,7 @@ class OpenAIClient:
     prompt=""
   ):
     if video_type=='url':
-        video_msg = {"type": "image_url", "image_url": {"url": video}}
+        video_msg = {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{video}"}}
     elif video_type=='frame_list':
         video_msg = {"type": "video", "video": video['frame_list']}
     

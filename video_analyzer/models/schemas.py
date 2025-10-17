@@ -3,7 +3,7 @@ from typing import Optional
 
 class AnalysisRequest(BaseModel):
     """Schema for analysis request body."""
-    video: str = Field(..., description="url of video (base64 encoded)")
+    video: str = Field(..., description="url of video or base64 encoded video")
     prompt: str = Field("Analyze this screen record and describe what you see in detail.", 
                        description="Prompt/instructions for the analysis")
     video_type: str = Field("url", description="Type of video (url or frame_list)")

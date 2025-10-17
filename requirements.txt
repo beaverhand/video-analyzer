@@ -6,3 +6,8 @@ pydantic>=2.0.0,<3.0.0
 pydantic-settings>=2.6.2,<3.0.0
 python-dotenv>=1.0.0,<2.0.0
 
+# OpenRouter
+openai
+transformers
+structlog
+
