@@ -1,13 +1,15 @@
 import asyncio
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import StreamingResponse
-from screen_analysis.logger import GLOBAL_LOGGER as log
+from utils.logger import GLOBAL_LOGGER as log
+from client.local import LocalClient
 from utils.output_streams import event_stream
 
 router = APIRouter()
+client = LocalClient()
 
 @router.post("/analyze")
-async def analyze_image(request: AnalysisRequest):
+async def analyze(request: AnalysisRequest):
     """
     Analyze an image using the specified backend.
     
@@ -23,7 +25,7 @@ async def analyze_image(request: AnalysisRequest):
 
         if request.stream:
             log.info("Calling FastVLM service with streaming...")
-            stream = fast_vlm_service.analyze_image(image, request.prompt, stream=True)
+            stream = client.invoke(image, request.prompt, stream=True)
             
             return StreamingResponse(
                 event_stream(stream),
