@@ -7,13 +7,14 @@ from fastapi import APIRouter, HTTPException, UploadFile, File
 from models.schemas import AnalysisRequest, AnalysisResponse
 from fastapi.responses import StreamingResponse
 from logger import GLOBAL_LOGGER as log
-# from client.local import LocalClient
+from client.local import LocalClient
 from client.openai import OpenAIClient
 from utils.output_streams import event_stream
+from utils.video import get_video_frames
 
 router = APIRouter()
-# client = LocalClient()
-client = OpenAIClient()
+client = LocalClient()
+# client = OpenAIClient()
 
 @router.post("/analyze")
 async def analyze(request: AnalysisRequest):
@@ -25,14 +26,14 @@ async def analyze(request: AnalysisRequest):
     try:
         # Decode the base64 image
         try:
-            video_data = base64.b64decode(request.video)
-            video = Image.open(io.BytesIO(video_data))
+            video_data = request.video
+            video_path = get_video_frames(video_data)
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Invalid image data: {str(e)}")
 
         if request.stream:
             log.info("Calling LLM Client with streaming...")
-            stream = client.invoke(video, request.prompt, stream=True)
+            stream = client.invoke(video_path, request.prompt, stream=True)
             
             return StreamingResponse(
                 event_stream(stream),
@@ -46,7 +47,7 @@ async def analyze(request: AnalysisRequest):
 
         else:        
             log.info("Calling FastVLM service with non-streaming...")
-            analysis = client.invoke(video, request.prompt)
+            analysis = client.invoke(video_path, request.prompt)
             return {
                 "analysis": analysis,
             }

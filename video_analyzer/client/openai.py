@@ -1,11 +1,12 @@
 import os
 from openai import OpenAI
+from core.config import settings
 
 class OpenAIClient:
   def __init__(self, model="qwen/qwen3-vl-8b-thinking"):
     self.client = OpenAI(
-        api_key = "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",
-        base_url = "https://openrouter.ai/api/v1",
+        api_key = settings.OPENROUTER_API_KEY,
+        base_url = settings.OPENROUTER_BASE_URL,
     )
     self.model = model
 

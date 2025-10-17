@@ -11,3 +11,6 @@ openai
 transformers
 structlog
 
+
+# Qwen VL Utils
+qwen-vl-utils
