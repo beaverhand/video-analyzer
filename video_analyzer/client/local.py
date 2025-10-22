@@ -1,6 +1,7 @@
 from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 from logger import GLOBAL_LOGGER as log
+from client.llm_client import LLMClient
 
 class LocalClient(LLMClient):
   def __init__ (self, model="Qwen/Qwen3-VL-4B-Thinking"):
@@ -51,7 +52,7 @@ class LocalClient(LLMClient):
     output_text = self.processor.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=True)
     return output_text
 
-  def inference(self, video, prompt, max_new_tokens=2048, total_pixels=20480 * 32 * 32, min_pixels=64 * 32 * 32, max_frames= 2048, sample_fps = 2):
+  def invoke(self, video, prompt, max_new_tokens=2048, total_pixels=20480 * 32 * 32, min_pixels=64 * 32 * 32, max_frames= 2048, sample_fps = 2):
     """
     Perform multimodal inference on input video and text prompt to generate model response.
 
