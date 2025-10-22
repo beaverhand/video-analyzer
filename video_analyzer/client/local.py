@@ -2,7 +2,7 @@ from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 from logger import GLOBAL_LOGGER as log
 
-class LocalClient(LLMClientABC):
+class LocalClient(LLMClient):
   def __init__ (self, model="Qwen/Qwen3-VL-4B-Thinking"):
     self.model = Qwen3VLForConditionalGeneration.from_pretrained(model, dtype="auto", device_map="auto")
     self.processor = AutoProcessor.from_pretrained(model)
