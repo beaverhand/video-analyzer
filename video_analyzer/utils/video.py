@@ -6,7 +6,7 @@ import requests
 import numpy as np
 from PIL import Image
 import decord
-from decord import VideoReader, cpu
+# from decord import VideoReader, cpu
 from logger import GLOBAL_LOGGER as log
 
 
@@ -29,24 +29,24 @@ def get_video_frames(video_path, num_frames=128, cache_dir='.cache'):
     else:
         video_file_path = video_path
 
-    frames_cache_file = os.path.join(cache_dir, f'{video_hash}_{num_frames}_frames.npy')
-    timestamps_cache_file = os.path.join(cache_dir, f'{video_hash}_{num_frames}_timestamps.npy')
+    # frames_cache_file = os.path.join(cache_dir, f'{video_hash}_{num_frames}_frames.npy')
+    # timestamps_cache_file = os.path.join(cache_dir, f'{video_hash}_{num_frames}_timestamps.npy')
 
-    if os.path.exists(frames_cache_file) and os.path.exists(timestamps_cache_file):
-        log.info(f"Video frames already cached before")
-        return video_file_path
-    try:
-      vr = VideoReader(video_file_path, ctx=cpu(0))
-      total_frames = len(vr)
+    # if os.path.exists(frames_cache_file) and os.path.exists(timestamps_cache_file):
+    #     log.info(f"Video frames already cached before")
+    #     return video_file_path
+    # try:
+    #   vr = VideoReader(video_file_path, ctx=cpu(0))
+    #   total_frames = len(vr)
 
-      indices = np.linspace(0, total_frames - 1, num=num_frames, dtype=int)
-      frames = vr.get_batch(indices).asnumpy()
-      timestamps = np.array([vr.get_frame_timestamp(idx) for idx in indices])
+    #   indices = np.linspace(0, total_frames - 1, num=num_frames, dtype=int)
+    #   frames = vr.get_batch(indices).asnumpy()
+    #   timestamps = np.array([vr.get_frame_timestamp(idx) for idx in indices])
 
-      np.save(frames_cache_file, frames)
-      np.save(timestamps_cache_file, timestamps)
-      log.info(f"Video frames cached to {frames_cache_file} and {timestamps_cache_file}")
-    except Exception as e:
-      log.exception(str(e))
-      raise HTTPException(status_code=500, detail=str(e))
+    #   np.save(frames_cache_file, frames)
+    #   np.save(timestamps_cache_file, timestamps)
+    #   log.info(f"Video frames cached to {frames_cache_file} and {timestamps_cache_file}")
+    # except Exception as e:
+    #   log.exception(str(e))
+    #   raise HTTPException(status_code=500, detail=str(e))
     return video_file_path
