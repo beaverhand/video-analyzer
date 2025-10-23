@@ -23,7 +23,7 @@ def get_video_frames(video_path, num_frames=128, cache_dir='.cache'):
 
     video_hash = hashlib.md5(video_path.encode('utf-8')).hexdigest()
     if video_path.startswith('http://') or video_path.startswith('https://'):
-        video_file_path = os.path.join(cache_dir, f'{video_hash}.mov')
+        video_file_path = os.path.join(cache_dir, f'{video_hash}.webm')
         if not os.path.exists(video_file_path):
             download_video(video_path, video_file_path)
     else:
