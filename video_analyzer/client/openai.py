@@ -4,7 +4,7 @@ from core.config import settings
 from client.llm_client import LLMClient
 
 class OpenAIClient(LLMClient):
-  def __init__(self, model="qwen/qwen3-vl-8b-thinking"):
+  def __init__(self, model="qwen/qwen3-vl-8b-instruct"):
     self.client = OpenAI(
         api_key = settings.OPENROUTER_API_KEY,
         base_url = settings.OPENROUTER_BASE_URL,
