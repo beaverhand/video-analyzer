@@ -13,4 +13,4 @@ structlog
 
 
 # Qwen VL Utils
-qwen-vl-utils
+qwen-vl-utils[decord]
