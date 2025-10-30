@@ -17,8 +17,15 @@ class Settings(BaseSettings):
     STATIC_DIR: Path = BASE_DIR / "static"
     TEMPLATES_DIR: Path = BASE_DIR / "templates"
 
+    # Model Settings
+    MODEL: str = os.getenv("MODEL", "Qwen/Qwen3-VL-4B-Instruct")
+
+    # VLLM Settings
+    VLLM_PORT: int = os.getenv("VLLM_PORT", 22002)
+
     # OpenRouter Settings
-    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
-    OPENROUTER_BASE_URL: str = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+    API_KEY: str = os.getenv("API_KEY", "")
+    BASE_URL: str = os.getenv("BASE_URL", "https://localhost:{VLLM_PORT}/api/v1").format(VLLM_PORT=VLLM_PORT)
+
 
 settings = Settings()
