@@ -5,7 +5,7 @@ from client.llm_client import LLMClient
 import os
 
 class LocalClient(LLMClient):
-  def __init__ (self, model="Qwen/Qwen3-VL-4B-Thinking"):
+  def __init__ (self, model="Qwen/Qwen3-VL-4B-Instruct"):
     self.model = Qwen3VLForConditionalGeneration.from_pretrained(model, dtype="auto", device_map="auto")
     self.processor = AutoProcessor.from_pretrained(model)
 
@@ -89,6 +89,8 @@ class LocalClient(LLMClient):
     except Exception as e:
       log.exception("Error processing analysis request", str(e))
       raise HTTPException(status_code=500, detail=str(e))
-    finally:
-      # clean up the video file after processing
-      self.clean_up(video)
+    # below is activated if video processed is have to be downloaded, because
+    # the current process is reading from gcs bucket, it's should not be deleted after processing
+    # finally:
+    #   # clean up the video file after processing
+    #   self.clean_up(video)

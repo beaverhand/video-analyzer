@@ -46,7 +46,7 @@ async def analyze(request: AnalysisRequest):
             )
 
         else:        
-            log.info("Calling FastVLM service with non-streaming...")
+            log.info("Calling Qwen service with non-streaming...")
             analysis = client.invoke(video_path, request.prompt)
             return {
                 "analysis": analysis,
