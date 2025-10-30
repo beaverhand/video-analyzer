@@ -4,7 +4,7 @@ from core.config import settings
 from client.llm_client import LLMClient
 from logger import GLOBAL_LOGGER as log
 class OpenAIClient(LLMClient):
-  def __init__(self, model="qwen/qwen3-vl-4b-instruct"):
+  def __init__(self, model="Qwen/Qwen3-VL-4B-Instruct"):
     self.client = OpenAI(
         api_key = settings.OPENROUTER_API_KEY,
         base_url = settings.OPENROUTER_BASE_URL,
