@@ -2,9 +2,9 @@ import os
 from openai import OpenAI
 from core.config import settings
 from client.llm_client import LLMClient
-
+from logger import GLOBAL_LOGGER as log
 class OpenAIClient(LLMClient):
-  def __init__(self, model="qwen/qwen3-vl-8b-instruct"):
+  def __init__(self, model="qwen/qwen3-vl-4b-instruct"):
     self.client = OpenAI(
         api_key = settings.OPENROUTER_API_KEY,
         base_url = settings.OPENROUTER_BASE_URL,
@@ -18,10 +18,12 @@ class OpenAIClient(LLMClient):
       video_type='url'
   ):
       messages = self.message_synthesis(video, video_type, prompt)
+      log.debug("Message Syntesis is done")
       completion = self.client.chat.completions.create(
           model = self.model,
           messages = messages,
       )
+      log.debug("Completion is done")
       return completion.choices[0].message.content
 
   def message_synthesis(
@@ -31,7 +33,7 @@ class OpenAIClient(LLMClient):
     prompt=""
   ):
     if video_type=='url':
-        video_msg = {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{video}"}}
+        video_msg = {"type": "video_url", "video_url": {"url": video}}
     elif video_type=='frame_list':
         video_msg = {"type": "video", "video": video['frame_list']}
     

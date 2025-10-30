@@ -1,33 +1,28 @@
-import asyncio
 import base64
 import io
-import json
 from PIL import Image
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from models.schemas import AnalysisRequest, AnalysisResponse
 from fastapi.responses import StreamingResponse
 from logger import GLOBAL_LOGGER as log
-from client.local import LocalClient
 from client.openai import OpenAIClient
 from utils.output_streams import event_stream
 from utils.video import get_video_frames
 
 router = APIRouter()
-client = LocalClient()
-# client = OpenAIClient()
+client = OpenAIClient()
 
 @router.post("/analyze")
 async def analyze(request: AnalysisRequest):
     """
-    Analyze an image using the specified backend.
+    Analyze using the specified backend.
     
-    Supports FastVLM backend.
+    Supports Qwen backend.
     """
     try:
         # Decode the base64 image
         try:
-            video_data = request.video
-            video_path = get_video_frames(video_data)
+            video_path = request.video
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Invalid image data: {str(e)}")
 
@@ -57,34 +52,3 @@ async def analyze(request: AnalysisRequest):
     except Exception as e:
         log.exception("Error processing analysis request")
         raise HTTPException(status_code=500, detail=str(e))
-
-@router.post("/analyze/file", response_model=AnalysisResponse)
-async def analyze_image_file(
-    file: UploadFile = File(...),
-    prompt: str = "Analyze this screen capture and describe what you see in detail.",
-):
-    """
-    Alternative endpoint that accepts an image file upload instead of base64.
-    """
-    try:
-        # Read and validate the uploaded file
-        contents = await file.read()
-        image = Image.open(io.BytesIO(contents)).convert("RGB")
-        
-        # Convert to base64 for the standard analysis flow
-        buffered = io.BytesIO()
-        image.save(buffered, format="JPEG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-        log.info("Image converted to base64")
-        
-        # Use the standard analysis endpoint
-        analysis_request = AnalysisRequest(
-            video=img_str,
-            prompt=prompt,
-        )
-        log.info("Analysis request created")
-        return await analyze(analysis_request)
-        
-    except Exception as e:
-        log.error(str(e))
-        raise HTTPException(status_code=400, detail=f"Error processing image: {str(e)}")
