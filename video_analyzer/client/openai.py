@@ -3,6 +3,7 @@ from openai import OpenAI
 from core.config import settings
 from client.llm_client import LLMClient
 from logger import GLOBAL_LOGGER as log
+from prompts.custom_prompt import SYSTEM_PROMPT
 class OpenAIClient(LLMClient):
   def __init__(self, model="qwen/qwen3-vl-4b-instruct"):
     self.client = OpenAI(
@@ -38,6 +39,10 @@ class OpenAIClient(LLMClient):
         video_msg = {"type": "video", "video": video['frame_list']}
     
     messages = [
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT,
+        },
         {
             "role": "user",
             "content": [
