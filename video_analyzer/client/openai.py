@@ -5,7 +5,7 @@ from client.llm_client import LLMClient
 from logger import GLOBAL_LOGGER as log
 from prompts.custom_prompt import SYSTEM_PROMPT
 class OpenAIClient(LLMClient):
-  def __init__(self, model="qwen/qwen3-vl-4b-instruct"):
+  def __init__(self, model=settings.MODEL):
     self.client = OpenAI(
         api_key = settings.API_KEY,
         base_url = settings.BASE_URL,
