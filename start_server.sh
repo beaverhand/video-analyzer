@@ -14,6 +14,8 @@ source /home/bornouksyn/video-analyzer/.env
 set +a                   # stop auto-exporting
 
 echo "VLLM_PORT is $VLLM_PORT"
+echo "MODEL is $MODEL"
+echo "BASE URL is $BASE_URL"
 
 # Optionally wait for CUDA to be ready
 echo "Waiting for CUDA..."
@@ -38,7 +40,7 @@ vllm serve $MODEL \
   --max-num-batched-tokens 20000    \
   --gpu-memory-utilization 0.90    \
   --async-scheduling \
-  --media-io-kwargs '{"video": {"num_frames": 120}}' \  # assumptions is that the video length is 1 minutes, with 2 fps
+  --media-io-kwargs '{"video": {"num_frames": 120}}' \
   --disable-log-requests \
   --host 0.0.0.0  \
   --port $VLLM_PORT \
@@ -48,7 +50,7 @@ VLLM_PID=$!
 
 # Wait for vLLM to be ready
 echo "⌛ Waiting for vLLM server to be ready..."
-until curl -s http://127.0.0.1:8000/v1/models &>/dev/null; do
+until curl -s http://127.0.0.1:$VLLM_PORT/v1/models &>/dev/null; do
   echo "vLLM not ready yet, retrying in 3s..."
   sleep 3
 done
