@@ -34,11 +34,14 @@ ANALYZER_LOG="$LOG_DIR/video_analyzer_$(date +'%Y%m%d_%H%M%S').log"
 # Start vLLM server (background)
 echo "🚀 Starting vLLM server..."
 vllm serve $MODEL \
-  --port $VLLM_PORT \
-  --tensor-parallel-size 1 \
-  --max-num-batched-tokens 16384 \
-  --max-num-seqs 8 \
+  --max-model-len 20000   \
+  --max-num-batched-tokens 20000    \
+  --gpu-memory-utilization 0.90    \
+  --async-scheduling \
+  --media-io-kwargs '{"video": {"num_frames": 120}}' \  # assumptions is that the video length is 1 minutes, with 2 fps
   --disable-log-requests \
+  --host 0.0.0.0  \
+  --port $VLLM_PORT \
   > "$VLLM_LOG" 2>&1 &
 
 VLLM_PID=$!
