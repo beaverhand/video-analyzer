@@ -14,3 +14,6 @@ structlog
 
 # Qwen VL Utils
 qwen-vl-utils
+
+# vllm
+vllm
