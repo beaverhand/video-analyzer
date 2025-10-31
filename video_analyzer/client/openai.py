@@ -39,10 +39,10 @@ class OpenAIClient(LLMClient):
         video_msg = {"type": "video", "video": video['frame_list']}
     
     messages = [
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT,
-        },
+        # {
+        #     "role": "system",
+        #     "content": SYSTEM_PROMPT,
+        # },
         {
             "role": "user",
             "content": [

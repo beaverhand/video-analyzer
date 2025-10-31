@@ -9,11 +9,8 @@ JSON Schema:
 {
     "events": [
         {
-            "timestamp": "2024-01-01T00:00:00.000Z",
-            "action": "open_web_page",
-            "url": "https://example.com",
-            "confidence": 0.95
-            "Details": "The user opened a web page."
+            "timestamp": "00.00.00.000"  # Format: HH.MM.SS.mmm,
+            "Screen Details": "The user opened a web page. the webpage contains youtube video of football match"
         }
     ]
 }
