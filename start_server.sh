@@ -1,8 +1,12 @@
 #!/bin/bash
 # Activate conda environment and start server
 
+# Set retry parameters
+MAX_RETRIES=60
+RETRY_COUNT=0
+
 # Load Conda into the shell
-source /home/bornouksyn/miniconda3/etc/profile.d/conda.sh
+source /opt/conda/etc/profile.d/conda.sh
 
 # Activate the environment
 conda activate qwen
@@ -36,22 +40,27 @@ ANALYZER_LOG="$LOG_DIR/video_analyzer_$(date +'%Y%m%d_%H%M%S').log"
 # Start vLLM server (background)
 echo "🚀 Starting vLLM server..."
 vllm serve $MODEL \
-  --max-model-len 20000   \
-  --max-num-batched-tokens 20000    \
-  --gpu-memory-utilization 0.90    \
+  --max-model-len 12000   \
+  --max-num-batched-tokens 12000    \
+  --gpu-memory-utilization 0.70    \
   --async-scheduling \
-  --media-io-kwargs '{"video": {"num_frames": 120}}' \
+  --media-io-kwargs '{"video": {"num_frames": 10}}' \
   --disable-log-requests \
   --host 0.0.0.0  \
   --port $VLLM_PORT \
+  --tensor-parallel-size 2 \
   > "$VLLM_LOG" 2>&1 &
-
 VLLM_PID=$!
 
 # Wait for vLLM to be ready
 echo "⌛ Waiting for vLLM server to be ready..."
 until curl -s http://127.0.0.1:$VLLM_PORT/v1/models &>/dev/null; do
-  echo "vLLM not ready yet, retrying in 3s..."
+  RETRY_COUNT=$((RETRY_COUNT + 1))
+  if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+    echo "❌ vLLM server failed to start after $((MAX_RETRIES * 3)) seconds."
+    exit 1
+  fi
+  echo "vLLM not ready yet, retrying in 3s... ($RETRY_COUNT/$MAX_RETRIES)"
   sleep 3
 done
 echo "✅ vLLM server is ready with $MODEL"

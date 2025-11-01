@@ -1,4 +1,4 @@
-# Core Dependencies
+# Core Dependencies for API Server
 fastapi>=0.104.0,<1.0.0
 uvicorn[standard]>=0.24.0,<1.0.0
 python-multipart>=0.0.6,<1.0.0
@@ -6,14 +6,18 @@ pydantic>=2.0.0,<3.0.0
 pydantic-settings>=2.6.2,<3.0.0
 python-dotenv>=1.0.0,<2.0.0
 
-# OpenRouter
+# Media Inference Dependencies
 openai
 transformers
 structlog
+sentencepiece
+bitsandbytes
+protobuf
+decord
+numpy
 
 
-# Qwen VL Utils
+# Qwen VL Utils Specific
 qwen-vl-utils
 
-# vllm
-vllm
+
